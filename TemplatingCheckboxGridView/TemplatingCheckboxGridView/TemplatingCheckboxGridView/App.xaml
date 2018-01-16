@@ -1,0 +1,404 @@
+﻿<Application
+    x:Class="TemplatingCheckboxGridView.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TemplatingCheckboxGridView"
+    xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  import des style telerik  -->
+                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/System.Windows.xaml" />
+                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml" />
+                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Input.xaml" />
+                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.GridView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--#region Icones-->
+            <DrawingImage x:Key="IconCheck">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+                        <DrawingGroup Transform="1,0,0,1,1492,1075">
+                            <DrawingGroup Transform="6.12323E-17,-1,1,6.12323E-17,-1490,-1063">
+                                <GeometryDrawing Brush="#FF4F4F4F" Geometry="F1 M16,16z M0,0z M0,4L-0.707107,3.29289 -1.41421,4 -0.707107,4.70711 0,4z M8.70711,11.2929L0.707107,3.29289 -0.707107,4.70711 7.29289,12.7071 8.70711,11.2929z M0.707107,4.70711L4.70711,0.707107 3.29289,-0.707107 -0.707107,3.29289 0.707107,4.70711z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+            <DrawingImage x:Key="IconCheckboxUnchecked">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+                        <DrawingGroup Transform="1,0,0,1,1544,844">
+                            <DrawingGroup>
+                                <DrawingGroup Transform="1,0,0,1,-1544,-844">
+                                    <GeometryDrawing Brush="#FF4F4F4F" Geometry="F1 M16,16z M0,0z M16,0L18,0 18,-2 16,-2 16,0z M0,0L0,-2 -2,-2 -2,0 0,0z M0,16L-2,16 -2,18 0,18 0,16z M16,16L16,18 18,18 18,16 16,16z M16,-2L15.3,-2 15.3,2 16,2 16,-2z M15.3,-2L0.7,-2 0.7,2 15.3,2 15.3,-2z M0.7,-2L0,-2 0,2 0.7,2 0.7,-2z M-2,0L-2,0.7 2,0.7 2,0 -2,0z M-2,0.7L-2,15.3 2,15.3 2,0.7 -2,0.7z M-2,15.3L-2,16 2,16 2,15.3 -2,15.3z M0,18L0.7,18 0.7,14 0,14 0,18z M0.7,18L15.3,18 15.3,14 0.7,14 0.7,18z M15.3,18L16,18 16,14 15.3,14 15.3,18z M18,16L18,15.3 14,15.3 14,16 18,16z M18,15.3L18,0.7 14,0.7 14,15.3 18,15.3z M18,0.7L18,0 14,0 14,0.7 18,0.7z" />
+                                </DrawingGroup>
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+
+            <DrawingImage x:Key="IconCheckboxChecked">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+                        <DrawingGroup Transform="1,0,0,1,1518,844">
+                            <DrawingGroup>
+                                <DrawingGroup Transform="1,0,0,1,-1518,-844">
+                                    <GeometryDrawing Brush="#FF4F4F4F" Geometry="F1 M16,16z M0,0z M16,0L18,0 18,-2 16,-2 16,0z M0,0L0,-2 -2,-2 -2,0 0,0z M0,16L-2,16 -2,18 0,18 0,16z M16,16L16,18 18,18 18,16 16,16z M16,-2L15.3,-2 15.3,2 16,2 16,-2z M15.3,-2L0.7,-2 0.7,2 15.3,2 15.3,-2z M0.7,-2L0,-2 0,2 0.7,2 0.7,-2z M-2,0L-2,0.7 2,0.7 2,0 -2,0z M-2,0.7L-2,15.3 2,15.3 2,0.7 -2,0.7z M-2,15.3L-2,16 2,16 2,15.3 -2,15.3z M0,18L0.7,18 0.7,14 0,14 0,18z M0.7,18L15.3,18 15.3,14 0.7,14 0.7,18z M15.3,18L16,18 16,14 15.3,14 15.3,18z M18,16L18,15.3 14,15.3 14,16 18,16z M18,15.3L18,0.7 14,0.7 14,15.3 18,15.3z M18,0.7L18,0 14,0 14,0.7 18,0.7z" />
+                                </DrawingGroup>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,-1514,-839">
+                                <GeometryDrawing Brush="#FF4F4F4F" Geometry="F1 M16,16z M0,0z M2.45714,5L1.98028,5.53208 2.4587,5.96085 2.93572,5.53054 2.45714,5z M-0.476861,3.32996L1.98028,5.53208 2.934,4.46792 0.476861,2.26579 -0.476861,3.32996z M2.93572,5.53054L8.47858,0.530539 7.52142,-0.530539 1.97856,4.46946 2.93572,5.53054z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+
+            <ControlTemplate x:Key="IconCheckboxUndetermined">
+
+                <Grid>
+
+                    <Rectangle
+                        Height="245"
+                        Margin="215,25,58.6,52"
+                        Stroke="Pink"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="20" />
+                    <Path
+                        x:Name="CheckedVisual"
+                        Width="110.748"
+                        Height="201.495"
+                        Margin="0,0,108.684,0"
+                        HorizontalAlignment="Right"
+                        Data="M131.39087,-6.4949494 L175,175 84.252307,172.64104"
+                        RenderTransformOrigin="0.266,1.035"
+                        Stretch="Fill"
+                        Stroke="White"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="20"
+                        Visibility="Collapsed">
+                        <Path.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="45" />
+                                <TranslateTransform X="-63.595" Y="-78.566" />
+                            </TransformGroup>
+                        </Path.RenderTransform>
+                    </Path>
+                    <Rectangle
+                        x:Name="IndeterminateVisual"
+                        Width="135"
+                        Margin="0,80,113.6,102"
+                        HorizontalAlignment="Right"
+                        Fill="Pink"
+                        Stroke="White"
+                        StrokeEndLineCap="Round"
+                        StrokeLineJoin="Round"
+                        StrokeStartLineCap="Round"
+                        Visibility="Collapsed" />
+                </Grid>
+            </ControlTemplate>
+            <!--#endregion-->
+
+            <!--#region GridViewBox-->
+            <!--  Template de la GridViewCheckbox  -->
+            <ControlTemplate x:Key="GridViewCheckBoxTemplate" TargetType="telerik:GridViewCheckBox">
+                <Grid x:Name="Root" Background="Transparent">
+                    <!--<Viewbox>-->
+                    <Grid
+                        x:Name="grid"
+                        Width="20"
+                        Height="20"
+                        Background="Transparent">
+                        <Path
+                            x:Name="normal"
+                            Fill="#FF000000"
+                            Stretch="Fill">
+                            <Path.Data>
+                                <PathGeometry Figures="M 2 27 V 1 H 28 54 V 27 53 H 28 2 Z m 46 0 V 7 H 28 8 v 20 20 h 20 20 z" FillRule="NonZero" />
+                            </Path.Data>
+                        </Path>
+                        <Path
+                            x:Name="CheckVisual"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Fill="#FF000000"
+                            Opacity="0"
+                            Stretch="Fill"
+                            StrokeThickness="5">
+                            <Path.Data>
+                                <PathGeometry Figures="M 5.6885389 11.543552 3.307289 9.3206758 4.1282299 8.4867481 4.9491709 7.6528203 6.5824574 9.1649556 c 1.6282095 1.5074354 1.6350961 1.5105884 2.215294 1.0142904 0.320104 -0.2738148 2.2687266 -2.0158921 4.3302726 -3.8712827 2.061546 -1.8553906 3.857771 -3.3734375 3.991612 -3.3734375 0.13384 0 0.517413 0.3706958 0.852385 0.8237683 l 0.609038 0.823768 -0.625427 0.6016535 C 16.179863 6.8919839 8.3896491 13.781337 8.241578 13.774435 8.1470939 13.770031 6.9982263 12.766133 5.6885389 11.543552 Z" FillRule="NonZero" />
+                            </Path.Data>
+                        </Path>
+
+                        <Rectangle
+                            x:Name="IndeterminateVisual"
+                            Margin="4"
+                            Fill="#FF000000"
+                            Opacity="0" />
+                        <Rectangle
+                            x:Name="FocusVisual"
+                            Opacity="0"
+                            Stroke="Red" />
+                    </Grid>
+                    <!--</Viewbox>-->
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="MouseOver">
+                                <Storyboard>
+                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                        <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                    </ColorAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <Storyboard>
+                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                        <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                    </ColorAnimationUsingKeyFrames>
+                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="CheckVisual" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                        <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                    </ColorAnimationUsingKeyFrames>
+                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateVisual" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                        <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                    </ColorAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="grid"
+                                        Storyboard.TargetProperty="(UIElement.Opacity)"
+                                        To="0.6"
+                                        Duration="0" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="Content"
+                                        Storyboard.TargetProperty="(UIElement.Opacity)"
+                                        To="0.3"
+                                        Duration="0" />
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                        <VisualStateGroup x:Name="CheckStates">
+                            <VisualState x:Name="Unchecked" />
+                            <VisualState x:Name="Checked">
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="CheckVisual"
+                                        Storyboard.TargetProperty="(UIElement.Opacity)"
+                                        To="1"
+                                        Duration="0" />
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="Indeterminate">
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="IndeterminateVisual"
+                                        Storyboard.TargetProperty="(UIElement.Opacity)"
+                                        To="1"
+                                        Duration="0" />
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                        <VisualStateGroup x:Name="FocusStates">
+                            <VisualState x:Name="Unfocused" />
+                            <VisualState x:Name="Focused">
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="FocusVisual"
+                                        Storyboard.TargetProperty="(UIElement.Opacity)"
+                                        To="1"
+                                        Duration="0" />
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Grid>
+
+            </ControlTemplate>
+
+            <Style x:Key="GridViewCheckBoxStyle" TargetType="telerik:GridViewCheckBox">
+                <Setter Property="Template" Value="{StaticResource GridViewCheckBoxTemplate}" />
+            </Style>
+
+            <Style BasedOn="{StaticResource GridViewCheckBoxStyle}" TargetType="telerik:GridViewCheckBox" />
+            <!--#endregion-->
+
+            <!-- MARCHE PAS <Style x:Key="MyCheckBoxColumnCellStyle"
+                   BasedOn="{StaticResource GridViewCellStyle}"
+                   TargetType="telerik:GridViewCell">
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="telerik:GridViewCheckBoxColumn" BasedOn="{StaticResource GridViewCheckBoxColumnStyle}">
+                <Setter Property="CellStyle" Value="{StaticResource MyCheckBoxColumnCellStyle}"/>
+            </Style>-->
+
+            <!--#region checkbox editée-->
+            <Style
+                x:Key="StandardCheckBoxStyle"
+                BasedOn="{StaticResource CheckBoxStyle}"
+                TargetType="{x:Type CheckBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="CheckBox">
+                            <Grid x:Name="Root" Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--<Viewbox>-->
+                                <Grid
+                                    x:Name="grid"
+                                    Width="20"
+                                    Height="20"
+                                    Background="Transparent">
+                                    <Path
+                                        x:Name="normal"
+                                        Fill="#FF000000"
+                                        Stretch="Fill">
+                                        <Path.Data>
+                                            <PathGeometry Figures="M 2 27 V 1 H 28 54 V 27 53 H 28 2 Z m 46 0 V 7 H 28 8 v 20 20 h 20 20 z" FillRule="NonZero" />
+                                        </Path.Data>
+                                    </Path>
+                                    <Path
+                                        x:Name="CheckVisual"
+                                        Margin="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Fill="#FF000000"
+                                        Opacity="0"
+                                        Stretch="Fill"
+                                        StrokeThickness="5">
+                                        <Path.Data>
+                                            <PathGeometry Figures="M 5.6885389 11.543552 3.307289 9.3206758 4.1282299 8.4867481 4.9491709 7.6528203 6.5824574 9.1649556 c 1.6282095 1.5074354 1.6350961 1.5105884 2.215294 1.0142904 0.320104 -0.2738148 2.2687266 -2.0158921 4.3302726 -3.8712827 2.061546 -1.8553906 3.857771 -3.3734375 3.991612 -3.3734375 0.13384 0 0.517413 0.3706958 0.852385 0.8237683 l 0.609038 0.823768 -0.625427 0.6016535 C 16.179863 6.8919839 8.3896491 13.781337 8.241578 13.774435 8.1470939 13.770031 6.9982263 12.766133 5.6885389 11.543552 Z" FillRule="NonZero" />
+                                        </Path.Data>
+                                    </Path>
+
+                                    <Rectangle
+                                        x:Name="IndeterminateVisual"
+                                        Margin="4"
+                                        Fill="#FF000000"
+                                        Opacity="0" />
+                                    <Rectangle
+                                        x:Name="FocusVisual"
+                                        Opacity="0"
+                                        Stroke="Red" />
+
+                                </Grid>
+                                <!--</Viewbox>-->
+                                <ContentPresenter
+                                    x:Name="Content"
+                                    Grid.Column="1"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="Stroke">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Red" />
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                    <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="Stroke">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Red" />
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="CheckVisual" Storyboard.TargetProperty="Fill">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Red" />
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateVisual" Storyboard.TargetProperty="Fill">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Red" />
+                                                </ObjectAnimationUsingKeyFrames>-->
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="normal" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                    <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="CheckVisual" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                    <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateVisual" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                    <LinearColorKeyFrame KeyTime="0" Value="Red" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="grid"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    To="0.6"
+                                                    Duration="0" />
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Content"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    To="0.3"
+                                                    Duration="0" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="CheckStates">
+                                        <VisualState x:Name="Unchecked" />
+                                        <VisualState x:Name="Checked">
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="CheckVisual"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    To="1"
+                                                    Duration="0" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Indeterminate">
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="IndeterminateVisual"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    To="1"
+                                                    Duration="0" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="FocusStates">
+                                        <VisualState x:Name="Unfocused" />
+                                        <VisualState x:Name="Focused">
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="FocusVisual"
+                                                    Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                    To="1"
+                                                    Duration="0" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--  on applique le template  -->
+            <Style BasedOn="{StaticResource StandardCheckBoxStyle}" TargetType="{x:Type CheckBox}" />
+            <!--#endregion-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
