@@ -1,0 +1,82 @@
+﻿<Window x:Class="Poc_ComboPlus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Poc_ComboPlus"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="{Binding Title}"
+        Width="525"
+        Height="350"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <local:IdToColorConverter x:Key="IdToColorConverter" />
+
+        <DataTemplate x:Key="MyItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="Red"
+                           Text="{Binding Id}" />
+                <TextBlock Background="{Binding Id,
+                                                Converter={StaticResource IdToColorConverter}}"
+                           Foreground="White"
+                           Text="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Grid.Column="0">Combo Native</Label>
+
+                <ComboBox Grid.Column="1"
+                          Width="150"
+                          IsEditable="true"
+                          IsTextSearchEnabled="True"
+                          ItemTemplate="{StaticResource MyItemTemplate}"
+                          ItemsSource="{Binding Items}"
+                          TextSearch.TextPath="Name" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label>Combo Native virtualisée</Label>
+
+                <ComboBox Grid.Column="1"
+                          Width="150"
+                          IsEditable="true"
+                          IsTextSearchEnabled="True"
+                          ItemTemplate="{StaticResource MyItemTemplate}"
+                          ItemsSource="{Binding Items}"
+                          TextSearch.TextPath="Name">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label>telerik:RadComboBox</Label>
+                <telerik:RadComboBox Grid.Column="1"
+                                     AllowMultipleSelection="True"
+                                     ClearSelectionButtonContent="Clear selection"
+                                     ClearSelectionButtonVisibility="Visible"
+                                     Command="{Binding RefreshBooksCommand}"
+                                     EmptyText="Sélectionnez..."
+                                     ItemTemplate="{StaticResource MyItemTemplate}"
+                                     ItemsSource="{Binding Items}"
+                                     SelectedItem="{Binding SelectedItem}">
+                    <telerik:RadComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </telerik:RadComboBox.ItemsPanel>
+                </telerik:RadComboBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
