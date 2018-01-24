@@ -25,6 +25,7 @@
             ItemsSource="{Binding Items}">
             <telerik:RadGridView.Columns>
                 <telerik:GridViewCheckBoxColumn
+                    EditorStyle="{StaticResource MyEditorStyle}"
                     AutoSelectOnEdit="True"
                     DataMemberBinding="{Binding IsSelected}"
                     EditTriggers="CellClick" />
