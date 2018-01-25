@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Telerik.Windows.Data;
 
@@ -7,6 +8,18 @@ namespace Poc_ComboPlus
     public class EnhancedComboContext : INotifyPropertyChanged
     {
         private QueryableCollectionView _Items;
+
+        public EnhancedComboContext(IEnumerable<Item> data)
+        {
+            _Items = new QueryableCollectionView(data);
+            _Items.FilterDescriptors.Add(
+                new FilterDescriptor(
+                    "Name",
+                    FilterOperator.Contains,
+                    _Text != null
+                    ? _Text
+                    : ""));
+        }
 
         public QueryableCollectionView Items
         {
@@ -69,7 +82,7 @@ namespace Poc_ComboPlus
                 {
                     _SelectedItem = value;
 
-                    _Text = _SelectedItem.Name;
+                    _Text = _SelectedItem?.Name;
 
                     OnPropertyChanged("Text");
 

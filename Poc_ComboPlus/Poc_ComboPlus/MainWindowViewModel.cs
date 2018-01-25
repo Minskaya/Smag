@@ -21,7 +21,7 @@ namespace Poc_ComboPlus
             this.GroupedItems = new CollectionViewSource();
             this.GroupedItems.Source = this.Items;
             this.GroupedItems.GroupDescriptions.Add(new PropertyGroupDescription("Regroupement"));
-            this.EnhancedComboContext = new Poc_ComboPlus.EnhancedComboContext();
+            //this.EnhancedComboContext = new Poc_ComboPlus.EnhancedComboContext();
 
             this.LoadItems();
         }
@@ -91,13 +91,15 @@ namespace Poc_ComboPlus
                         .ToList();
 
                     this.RaisePropertyChanged(nameof(LinqGroup));
-                    using (this.EnhancedComboContext.Items.DeferRefresh())
-                    {
-                        foreach (var item in items.Result)
-                        {
-                            this.EnhancedComboContext.Items.AddNewItem(item);
-                        }
-                    }
+                    //using (this.EnhancedComboContext.Items.DeferRefresh())
+                    //{
+                    //    foreach (var item in items.Result)
+                    //    {
+                    //        this.EnhancedComboContext.Items.AddNewItem(item);
+                    //    }
+                    //}
+                    this.EnhancedComboContext = new Poc_ComboPlus.EnhancedComboContext(items.Result);
+                    RaisePropertyChanged(nameof(EnhancedComboContext));
                 });
             });
         }

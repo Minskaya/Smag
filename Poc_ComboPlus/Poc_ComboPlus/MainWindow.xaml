@@ -238,7 +238,8 @@
             <telerik:RadComboBox Grid.Column="1"
                                  EmptyText="Sélectionnez..."
                                  IsEditable="True"
-                                 Text="{Binding Text,
+                                 StaysOpenOnEdit="True"
+                                 Text="{Binding EnhancedComboContext.Text,
                                                 Mode=TwoWay}">
                 <telerik:RadComboBox.Items>
                     <telerik:RadComboBoxItem>
@@ -250,9 +251,9 @@
                                                      GroupRenderMode="Flat"
                                                      IsFilteringAllowed="False"
                                                      IsReadOnly="True"
-                                                     ItemsSource="{Binding Items}"
+                                                     ItemsSource="{Binding EnhancedComboContext.Items}"
                                                      RowIndicatorVisibility="Collapsed"
-                                                     SelectedItem="{Binding SelectedItem,
+                                                     SelectedItem="{Binding EnhancedComboContext.SelectedItem,
                                                                             Mode=TwoWay}"
                                                      ShowColumnHeaders="False"
                                                      ShowGroupPanel="False">
