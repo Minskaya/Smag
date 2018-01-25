@@ -13,7 +13,11 @@ namespace Poc_ComboPlus
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var idColor = (int)value % AvailableColors.Length;
-            return AvailableColors[idColor].Name;
+            var colorName = AvailableColors[idColor].Name;
+
+            return colorName == "White"
+                   ? "#FFAB6666"
+                   : colorName;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

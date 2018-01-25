@@ -6,77 +6,270 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="{Binding Title}"
-        Width="525"
-        Height="350"
+        Width="500"
+        Height="700"
         mc:Ignorable="d">
     <Window.Resources>
         <local:IdToColorConverter x:Key="IdToColorConverter" />
 
         <DataTemplate x:Key="MyItemTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="Red"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="3,0"
+                           Foreground="Red"
                            Text="{Binding Id}" />
-                <TextBlock Background="{Binding Id,
+                <TextBlock Grid.Column="1"
+                           Margin="3,0"
+                           Background="{Binding Id,
                                                 Converter={StaticResource IdToColorConverter}}"
                            Foreground="White"
                            Text="{Binding Name}" />
-            </StackPanel>
+            </Grid>
         </DataTemplate>
+
+        <local:ItemStyleSelector x:Key="ItemStyleSelector">
+
+            <local:ItemStyleSelector.GroupStyle>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="IsEnabled" Value="False" />
+                </Style>
+            </local:ItemStyleSelector.GroupStyle>
+
+            <local:ItemStyleSelector.ItemStyle>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </local:ItemStyleSelector.ItemStyle>
+        </local:ItemStyleSelector>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Grid.Column="0">Combo Native</Label>
 
-                <ComboBox Grid.Column="1"
-                          Width="150"
-                          IsEditable="true"
-                          IsTextSearchEnabled="True"
-                          ItemTemplate="{StaticResource MyItemTemplate}"
-                          ItemsSource="{Binding Items}"
-                          TextSearch.TextPath="Name" />
-            </StackPanel>
+    <StackPanel Grid.IsSharedSizeScope="True">
+        <Grid Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">Combo Native</Label>
 
-            <StackPanel Orientation="Horizontal">
-                <Label>Combo Native virtualisée</Label>
+            <ComboBox Grid.Column="1"
+                      IsEditable="true"
+                      IsTextSearchEnabled="True"
+                      ItemTemplate="{StaticResource MyItemTemplate}"
+                      ItemsSource="{Binding Items}"
+                      TextSearch.TextPath="Name" />
+        </Grid>
 
-                <ComboBox Grid.Column="1"
-                          Width="150"
-                          IsEditable="true"
-                          IsTextSearchEnabled="True"
-                          ItemTemplate="{StaticResource MyItemTemplate}"
-                          ItemsSource="{Binding Items}"
-                          TextSearch.TextPath="Name">
-                    <ComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel />
-                        </ItemsPanelTemplate>
-                    </ComboBox.ItemsPanel>
-                </ComboBox>
-            </StackPanel>
+        <Grid Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label>Combo Native virtualisée</Label>
 
-            <StackPanel Orientation="Horizontal">
-                <Label>telerik:RadComboBox</Label>
-                <telerik:RadComboBox Grid.Column="1"
-                                     AllowMultipleSelection="True"
-                                     ClearSelectionButtonContent="Clear selection"
-                                     ClearSelectionButtonVisibility="Visible"
-                                     Command="{Binding RefreshBooksCommand}"
-                                     EmptyText="Sélectionnez..."
-                                     ItemTemplate="{StaticResource MyItemTemplate}"
-                                     ItemsSource="{Binding Items}"
-                                     SelectedItem="{Binding SelectedItem}">
-                    <telerik:RadComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel />
-                        </ItemsPanelTemplate>
-                    </telerik:RadComboBox.ItemsPanel>
-                </telerik:RadComboBox>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+            <ComboBox Grid.Column="1"
+                      IsEditable="true"
+                      IsTextSearchEnabled="True"
+                      ItemTemplate="{StaticResource MyItemTemplate}"
+                      ItemsSource="{Binding Items}"
+                      TextSearch.TextPath="Name">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+        </Grid>
+
+        <Grid Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label>telerik:RadComboBox</Label>
+            <telerik:RadComboBox Grid.Column="1"
+                                 AllowMultipleSelection="False"
+                                 ClearSelectionButtonContent="Clear selection"
+                                 ClearSelectionButtonVisibility="Visible"
+                                 Command="{Binding RefreshBooksCommand}"
+                                 EmptyText="Sélectionnez..."
+                                 IsEditable="True"
+                                 ItemTemplate="{StaticResource MyItemTemplate}"
+                                 ItemsSource="{Binding Items}">
+                <telerik:RadComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </telerik:RadComboBox.ItemsPanel>
+            </telerik:RadComboBox>
+        </Grid>
+
+        <Grid Height="100"
+              Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label>telerik:RadListBox</Label>
+            <!--
+                Grrrr
+                https://www.telerik.com/forums/grouping-slows-down#nsiLmOH-xU-VYWckvx1V6w
+            -->
+            <telerik:RadListBox x:Name="radlistbox"
+                                Grid.Column="1"
+                                DisplayMemberPath="Name"
+                                IsScrollIntoViewEnabled="False"
+                                ItemsSource="{Binding GroupedItems.View}">
+                <telerik:RadListBox.GroupStyle>
+                    <GroupStyle />
+                </telerik:RadListBox.GroupStyle>
+            </telerik:RadListBox>
+        </Grid>
+
+        <Grid Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label>telerik:RadComboBox with group</Label>
+            <telerik:RadComboBox Grid.Column="1"
+                                 AllowMultipleSelection="False"
+                                 EmptyText="Sélectionnez..."
+                                 ItemContainerStyleSelector="{StaticResource ItemStyleSelector}"
+                                 ItemsSource="{Binding Items}">
+                <telerik:RadComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </telerik:RadComboBox.ItemsPanel>
+            </telerik:RadComboBox>
+        </Grid>
+
+        <Grid MaxHeight="250"
+              Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label>telerik:DropDown + Grid</Label>
+            <telerik:RadDropDownButton Grid.Column="1"
+                                       Content="Sélectionnez..."
+                                       DropDownMaxHeight="300"
+                                       DropDownWidth="{Binding RelativeSource={RelativeSource Self},
+                                                               Path=ActualWidth}">
+                <telerik:RadDropDownButton.DropDownContent>
+                    <telerik:RadGridView AutoGenerateColumns="False"
+                                         CanUserSearch="False"
+                                         GroupRenderMode="Flat"
+                                         ItemsSource="{Binding Items}"
+                                         RowIndicatorVisibility="Collapsed"
+                                         ShowColumnHeaders="False"
+                                         ShowGroupPanel="False">
+                        <telerik:RadGridView.GroupDescriptors>
+                            <telerik:GroupDescriptor Member="RegroupementId"
+                                                     SortDirection="Ascending" />
+                        </telerik:RadGridView.GroupDescriptors>
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}"
+                                                        Header="Name" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                </telerik:RadDropDownButton.DropDownContent>
+            </telerik:RadDropDownButton>
+        </Grid>
+
+        <!--
+        Vraiment pas bon : affiche des objets recursifs
+        <Grid Margin="1,5"
+              MaxHeight="250">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label>RadTreeListView</Label>
+
+            <telerik:RadTreeListView Grid.Column="1"
+                                     ItemsSource="{Binding LinqGroup}">
+                <telerik:RadTreeListView.ChildTableDefinitions>
+                    <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+                </telerik:RadTreeListView.ChildTableDefinitions>
+
+                <telerik:RadTreeListView.Columns>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}"
+                                    Header="Name" />
+                </telerik:RadTreeListView.Columns>
+            </telerik:RadTreeListView>
+        </Grid>-->
+
+        <Grid Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label>telerik:RadComboBox+Grid</Label>
+            <telerik:RadComboBox Grid.Column="1"
+                                 EmptyText="Sélectionnez..."
+                                 IsEditable="True"
+                                 Text="{Binding Text,
+                                                Mode=TwoWay}">
+                <telerik:RadComboBox.Items>
+                    <telerik:RadComboBoxItem>
+                        <telerik:RadComboBoxItem.Template>
+                            <ControlTemplate>
+                                <telerik:RadGridView x:Name="RadGridView1"
+                                                     AutoGenerateColumns="False"
+                                                     CanUserFreezeColumns="False"
+                                                     GroupRenderMode="Flat"
+                                                     IsFilteringAllowed="False"
+                                                     IsReadOnly="True"
+                                                     ItemsSource="{Binding Items}"
+                                                     RowIndicatorVisibility="Collapsed"
+                                                     SelectedItem="{Binding SelectedItem,
+                                                                            Mode=TwoWay}"
+                                                     ShowColumnHeaders="False"
+                                                     ShowGroupPanel="False">
+                                    <telerik:RadGridView.GroupDescriptors>
+                                        <telerik:GroupDescriptor Member="RegroupementId"
+                                                                 SortDirection="Ascending" />
+                                    </telerik:RadGridView.GroupDescriptors>
+                                    <telerik:RadGridView.Columns>
+                                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}"
+                                                                    Header="Name" />
+                                    </telerik:RadGridView.Columns>
+                                </telerik:RadGridView>
+                            </ControlTemplate>
+                        </telerik:RadComboBoxItem.Template>
+                    </telerik:RadComboBoxItem>
+                </telerik:RadComboBox.Items>
+            </telerik:RadComboBox>
+        </Grid>
+    </StackPanel>
 </Window>

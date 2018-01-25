@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
@@ -17,10 +18,17 @@ namespace Poc_ComboPlus
         public MainWindowViewModel()
         {
             this.Items = new SmartCollection<Item>();
+            this.GroupedItems = new CollectionViewSource();
+            this.GroupedItems.Source = this.Items;
+            this.GroupedItems.GroupDescriptions.Add(new PropertyGroupDescription("Regroupement"));
+            this.EnhancedComboContext = new Poc_ComboPlus.EnhancedComboContext();
+
             this.LoadItems();
         }
 
         public SmartCollection<Item> Items { get; private set; }
+
+        public CollectionViewSource GroupedItems { get; private set; }
 
         public Item SelectedItem
         {
@@ -53,6 +61,10 @@ namespace Poc_ComboPlus
             }
         }
 
+        public EnhancedComboContext EnhancedComboContext { get; private set; }
+
+        public IList<Toto> LinqGroup { get; private set; }
+
         private void LoadItems()
         {
             Task.Run(() =>
@@ -67,9 +79,34 @@ namespace Poc_ComboPlus
             })
             .ContinueWith(items =>
             {
-                InvokeOnUIThread(() => this.Items.Reset(items.Result));
+                InvokeOnUIThread(() =>
+                {
+                    this.Items.Reset(items.Result);
+                    this.LinqGroup = this.Items.GroupBy(x => x.RegroupementId)
+                        .Select(x => new Toto()
+                        {
+                            Key = x.Key,
+                            Items = x.ToList()
+                        })
+                        .ToList();
+
+                    this.RaisePropertyChanged(nameof(LinqGroup));
+                    using (this.EnhancedComboContext.Items.DeferRefresh())
+                    {
+                        foreach (var item in items.Result)
+                        {
+                            this.EnhancedComboContext.Items.AddNewItem(item);
+                        }
+                    }
+                });
             });
         }
+    }
+
+    public class Toto
+    {
+        public List<Item> Items { get; set; }
+        public int Key { get; set; }
     }
 
     public class Item
@@ -83,6 +120,7 @@ namespace Poc_ComboPlus
             this.Regroupement = string.Format(
                 "Regroupement {0}",
                 (i / 100) + 1);
+            this.RegroupementId = (i / 100) + 1;
 
             this.Name = string.Format(
                 "Element {0}",
@@ -92,6 +130,7 @@ namespace Poc_ComboPlus
         }
 
         public string Regroupement { get; set; }
+        public int RegroupementId { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
     }
