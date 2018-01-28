@@ -19,12 +19,24 @@ using System.Windows.Threading;
 
 namespace VirtualizingPanel
 {
+    public class Person
+    {
+        public Person(int id)
+        {
+            Age = id;
+            Name = $"Name {id}";
+        }
+
+        public int Age { get; set; }
+        public string Name { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class virtualizingWindow : Window, INotifyPropertyChanged
     {
-        public MainWindow()
+        public virtualizingWindow()
         {
             InitializeComponent();
             this.DataContext = this;
@@ -55,17 +67,5 @@ namespace VirtualizingPanel
             Message = string.Format("Rendering took {0} ms.", watch.ElapsedMilliseconds);
             this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(Message)));
         }
-    }
-
-    public class Person
-    {
-        public Person(int id)
-        {
-            Age = id;
-            Name = $"Name {id}";
-        }
-
-        public int Age { get; set; }
-        public string Name { get; set; }
     }
 }

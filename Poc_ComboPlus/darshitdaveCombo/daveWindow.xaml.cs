@@ -6,14 +6,14 @@ namespace darshitdaveCombo
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class daveWindow : Window
     {
         private const string FavouritesGroupName = "Favourites";
         private const string HistoryGroupName = "History";
         private const string MRUGroupName = "Most Recently Used";
         private ObservableCollection<URLDetails> _URLs;
 
-        public MainWindow()
+        public daveWindow()
         {
             _URLs = new ObservableCollection<URLDetails>();
             InitializeComponent();
@@ -25,7 +25,7 @@ namespace darshitdaveCombo
         {
             get
             {
-                return 2;
+                return 0;
             }
         }
 
