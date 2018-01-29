@@ -14,5 +14,10 @@ namespace Poc_ComboPlus
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
         }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+        }
     }
 }

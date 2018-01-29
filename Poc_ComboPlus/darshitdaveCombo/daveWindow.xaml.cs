@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace darshitdaveCombo
@@ -39,6 +40,11 @@ namespace darshitdaveCombo
             // Add MRU link
             _URLs.Add(new URLDetails { GroupName = MRUGroupName, Link = "www.msdn.com" });
 
+            foreach (var id in Enumerable.Range(1, 3333))
+            {
+                _URLs.Add(new URLDetails { GroupName = MRUGroupName, Link = $"www.msdn{id}.com" });
+            }
+
             // Add History links
             _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = "www.google.co.in" });
             _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = "www.yahoo.com" });
@@ -46,11 +52,19 @@ namespace darshitdaveCombo
             _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = "https://mail.google.com" });
             _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = "www.msdn.com" });
             _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = "www.wikipedia.com" });
+            foreach (var id in Enumerable.Range(1, 3333))
+            {
+                _URLs.Add(new URLDetails { GroupName = HistoryGroupName, Link = $"www.msdn{id}.com" });
+            }
 
             // Add Favorite links
             _URLs.Add(new URLDetails { GroupName = FavouritesGroupName, Link = "www.mymail.com" });
             _URLs.Add(new URLDetails { GroupName = FavouritesGroupName, Link = "www.codeproject.com" });
             _URLs.Add(new URLDetails { GroupName = FavouritesGroupName, Link = "www.songs.in" });
+            foreach (var id in Enumerable.Range(1, 3333))
+            {
+                _URLs.Add(new URLDetails { GroupName = FavouritesGroupName, Link = $"www.msdn{id}.com" });
+            }
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿<Window
-    x:Class="VirtualizingPanel.virtualizingWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:VirtualizingPanel"
-    Title="MainWindow"
-    Width="525"
-    Height="350">
+﻿<Window x:Class="VirtualizingPanel.virtualizingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:VirtualizingPanel"
+        Title="MainWindow"
+        Width="525"
+        Height="350">
     <Window.Resources>
         <CollectionViewSource x:Key="GroupedData"
-            Source="{Binding Persons}">
+                              Source="{Binding Persons}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Age" />
             </CollectionViewSource.GroupDescriptions>
@@ -16,49 +15,42 @@
 
         <DataTemplate x:Key="GroupHeaderTemplate">
             <TextBlock>
-                <TextBlock
-                    Background="Aqua"
-                    Text="Age" />
-                <TextBlock
-                    Background="Aqua"
-                    Text="{Binding Name}" />
+                <TextBlock Background="Aqua"
+                           Text="Age" />
+                <TextBlock Background="Aqua"
+                           Text="{Binding Name}" />
             </TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="PersonDataTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="5,0"
-                    Text="{Binding Name}" />
-                <TextBlock
-                    Margin="5,0"
-                    Text="{Binding Age}" />
+                <TextBlock Margin="5,0"
+                           Text="{Binding Name}" />
+                <TextBlock Margin="5,0"
+                           Text="{Binding Age}" />
             </StackPanel>
         </DataTemplate>
         <Style x:Key="ListBoxItemStyle"
-            TargetType="ListBoxItem">
+               TargetType="ListBoxItem">
             <Setter Property="Background" Value="Pink" />
             <Setter Property="Margin" Value="2" />
             <Setter Property="Padding" Value="2" />
         </Style>
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <Button
-            HorizontalAlignment="Center"
-            Click="Button_Click"
-            DockPanel.Dock="Bottom">
+        <Button HorizontalAlignment="Center"
+                Click="Button_Click"
+                DockPanel.Dock="Bottom">
             Load
         </Button>
-        <TextBlock
-            DockPanel.Dock="Bottom"
-            Text="{Binding Message}" />
-        <ListBox
-            HorizontalContentAlignment="Stretch"
-            Background="LightBlue"
-            ItemContainerStyle="{StaticResource ListBoxItemStyle}"
-            ItemTemplate="{StaticResource PersonDataTemplate}"
-            ItemsSource="{Binding Source={StaticResource GroupedData}}"
-            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-            VirtualizingStackPanel.IsVirtualizing="True">
+        <TextBlock DockPanel.Dock="Bottom"
+                   Text="{Binding Message}" />
+        <ListBox HorizontalContentAlignment="Stretch"
+                 Background="LightBlue"
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                 ItemTemplate="{StaticResource PersonDataTemplate}"
+                 ItemsSource="{Binding Source={StaticResource GroupedData}}"
+                 VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                 VirtualizingStackPanel.IsVirtualizing="True">
 
             <ListBox.GroupStyle>
                 <GroupStyle HeaderTemplate="{StaticResource GroupHeaderTemplate}" />
