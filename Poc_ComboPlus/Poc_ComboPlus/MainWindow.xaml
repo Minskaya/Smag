@@ -28,6 +28,25 @@
             </Grid>
         </DataTemplate>
 
+        <DataTemplate x:Key="MySelectedItemTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="3,0"
+                           Foreground="White"
+                           Background="{Binding Id,
+                                                Converter={StaticResource IdToColorConverter}}"
+                           Text="{Binding Id}" />
+                <TextBlock Grid.Column="1"
+                           Margin="3,0"
+                           Foreground="{Binding Id,
+                                                Converter={StaticResource IdToColorConverter}}"
+                           Text="{Binding Name}" />
+            </Grid>
+        </DataTemplate>
+
         <local:ItemStyleSelector x:Key="ItemStyleSelector">
 
             <local:ItemStyleSelector.GroupStyle>
@@ -120,8 +139,8 @@
                       ItemsSource="{Binding Items}"
                       TextSearch.TextPath="Name"
                       VirtualizingStackPanel.IsVirtualizing="True"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling"
-                      VirtualizingStackPanel.IsVirtualizingWhenGrouping="True">
+                      VirtualizingStackPanel.IsVirtualizingWhenGrouping="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
@@ -380,5 +399,38 @@
                 </telerik:RadComboBox.Items>
             </telerik:RadComboBox>
         </Grid>-->
+
+        <Grid Height="100"
+              Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label>EnhancedSelectionBox</Label>
+            <local:EnhancedSelectionBox x:Name="EnhancedSelectionBox"
+                                        Grid.Column="1"
+                                        GroupingMemberPath="Regroupement"
+                                        ItemTemplate="{StaticResource MyItemTemplate}"
+                                        SelectedItemTemplate="{StaticResource MySelectedItemTemplate}"
+                                        ItemsSource="{Binding Items}"
+                                        SelectionMode="Single"
+                                        TextSearchPath="Name" />
+        </Grid>
+
+        <Grid Height="100"
+              Margin="1,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  SharedSizeGroup="Label" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label>to delete</Label>
+            <telerik:RadAutoCompleteBox Grid.Column="1"
+                                        DropDownItemTemplate="{StaticResource MyItemTemplate}"
+                                        ItemsSource="{Binding Items}"
+                                        SelectionMode="Single"
+                                        TextSearchPath="Name" />
+        </Grid>
     </StackPanel>
 </Window>
