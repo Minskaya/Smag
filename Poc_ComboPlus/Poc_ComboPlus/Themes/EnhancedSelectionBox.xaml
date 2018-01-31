@@ -5,7 +5,6 @@
 
     <local:SelectionModeConverter x:Key="SelectionModeConverter" />
     <local:ItemsToCollectionViewConverter x:Key="ItemsToCollectionViewConverter" />
-    <local:ItemsToCollectionViewConvertertoto x:Key="ItemsToCollectionViewConvertertoto" />
 
     <!--  data template des regroupements  -->
     <DataTemplate x:Key="DefaultHeaderTemplate">
@@ -228,6 +227,7 @@
                                                                                 Converter={StaticResource SelectionModeConverter}}"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                 Template="{StaticResource AutoCompleteListBoxTemplate}"
+                                                TextSearchMode="Contains"
                                                 TextSearchPath="{TemplateBinding TextSearchPath}"
                                                 ToolTip="{TemplateBinding ToolTip}">
 
