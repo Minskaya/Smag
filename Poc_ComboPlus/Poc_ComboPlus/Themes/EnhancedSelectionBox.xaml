@@ -4,6 +4,180 @@
                     xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
 
     <local:SelectionModeConverter x:Key="SelectionModeConverter" />
+    <local:ItemsToCollectionViewConverter x:Key="ItemsToCollectionViewConverter" />
+    <local:ItemsToCollectionViewConvertertoto x:Key="ItemsToCollectionViewConvertertoto" />
+
+    <!--  data template des regroupements  -->
+    <DataTemplate x:Key="DefaultHeaderTemplate">
+        <DataTemplate.Resources>
+            <SolidColorBrush x:Key="ListBoxGroupHeaderBackground"
+                             Color="#FFDEDEDE" />
+            <SolidColorBrush x:Key="ListBoxGroupHeaderForeground"
+                             Color="#FF000000" />
+        </DataTemplate.Resources>
+        <StackPanel Margin="0,0,0,1"
+                    Background="{StaticResource ListBoxGroupHeaderBackground}">
+            <!--  Attention : la propriété du regroupement est toujours Name  -->
+            <TextBlock Margin="4,2"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource ListBoxGroupHeaderForeground}"
+                       Text="{Binding Name}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="AutoCompleteListBoxTemplate"
+                     TargetType="{x:Type telerik:RadAutoCompleteBox}">
+        <Grid>
+            <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" />
+            <Border x:Name="MouseOverVisual"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{DynamicResource {x:Static telerik:Windows8ResourceKey.StrongBrush}}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Opacity="0" />
+            <Border x:Name="FocusVisual"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{DynamicResource {x:Static telerik:Windows8ResourceKey.MarkerBrush}}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    IsHitTestVisible="False"
+                    Opacity="0" />
+            <Border x:Name="DisabledVisualElement"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    IsHitTestVisible="False"
+                    Opacity="0" />
+            <ScrollViewer x:Name="PART_ScrollViewer"
+                          Height="{TemplateBinding Height}"
+                          Margin="{TemplateBinding BorderThickness}"
+                          Padding="-1"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                          IsTabStop="False"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                <telerik:AutoCompleteBoxesItemsControl x:Name="PART_Boxes"
+                                                       Margin="{TemplateBinding Padding}"
+                                                       BoxesItemStyle="{TemplateBinding BoxesItemStyle}"
+                                                       BoxesItemStyleSelector="{TemplateBinding BoxesItemStyleSelector}"
+                                                       BoxesItemTemplate="{TemplateBinding BoxesItemTemplate}"
+                                                       BoxesItemTemplateSelector="{TemplateBinding BoxesItemTemplateSelector}"
+                                                       DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                                       Foreground="{TemplateBinding Foreground}"
+                                                       IsTabStop="False">
+                    <telerik:AutoCompleteBoxesItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerik:AutoCompleteBoxesWrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </telerik:AutoCompleteBoxesItemsControl.ItemsPanel>
+                </telerik:AutoCompleteBoxesItemsControl>
+            </ScrollViewer>
+            <Popup x:Name="PART_Popup">
+                <Grid x:Name="PopupRoot"
+                      MinWidth="{TemplateBinding MinDropDownWidth}"
+                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                    <!--  Listbox contenant les propositions bindée sur les élements filtrés de l'autocompletebox  -->
+                    <telerik:RadListBox x:Name="PART_ListBox"
+                                        MinWidth="{TemplateBinding MinDropDownWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                        Margin="0,1,0,0"
+                                        FontFamily="{TemplateBinding FontFamily}"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        IsScrollIntoViewEnabled="False"
+                                        IsTabStop="False"
+                                        IsTextSearchEnabled="True"
+                                        ItemTemplate="{TemplateBinding DropDownItemTemplate}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                        TextBinding="{x:Null}"
+                                        VirtualizingPanel.IsVirtualizing="True"
+                                        VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                        <!--  SelectedValueBinding="{x:Null}" a quoi ca sert ?  -->
+                        <telerik:RadListBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource ItemsToCollectionViewConverter}">
+
+                                <Binding Path="FilteredItems"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                         AncestorType=telerik:RadAutoCompleteBox}" />
+                                <Binding Path="GroupingMemberPath"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                         AncestorType=local:EnhancedSelectionBox}" />
+                            </MultiBinding>
+                        </telerik:RadListBox.ItemsSource>
+                        <telerik:RadListBox.GroupStyle>
+                            <GroupStyle HeaderTemplate="{StaticResource DefaultHeaderTemplate}" />
+                        </telerik:RadListBox.GroupStyle>
+                    </telerik:RadListBox>
+
+                    <Border Width="{Binding Width,
+                                            ElementName=PART_ListBox}"
+                            Margin="0,1,0,0"
+                            Background="{Binding Background,
+                                                 ElementName=PART_ListBox}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            Visibility="{Binding Visibility,
+                                                 ElementName=PART_NoResultsContentPresenter}">
+                        <ContentPresenter x:Name="PART_NoResultsContentPresenter"
+                                          MinWidth="{TemplateBinding MinDropDownWidth}"
+                                          MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                          Margin="3,4"
+                                          Content="{TemplateBinding NoResultsContent}"
+                                          ContentTemplate="{TemplateBinding NoResultsContentTemplate}"
+                                          Visibility="Collapsed">
+                            <ContentPresenter.Resources>
+                                <Style x:Key="{x:Type TextBlock}"
+                                       TargetType="{x:Type TextBlock}">
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </Grid>
+            </Popup>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="MouseOverVisual"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="1"
+                                             Duration="0" />
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="DisabledVisualElement"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0.5"
+                                             Duration="0" />
+                            <DoubleAnimation Storyboard.TargetName="Border"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0"
+                                             Duration="0" />
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Unfocused" />
+                    <VisualState x:Name="Focused">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="FocusVisual"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0.2"
+                                             Duration="0" />
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+    </ControlTemplate>
 
     <Style TargetType="{x:Type local:EnhancedSelectionBox}">
         <Setter Property="Background" Value="{telerik:Windows8Resource ResourceKey={x:Static telerik:Windows8ResourceKey.MainBrush}}" />
@@ -30,6 +204,7 @@
                                                 VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                AutoCompleteMode="SuggestAppend"
                                                 Background="{TemplateBinding Background}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -52,6 +227,7 @@
                                                 SelectionMode="{TemplateBinding SelectionMode,
                                                                                 Converter={StaticResource SelectionModeConverter}}"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                Template="{StaticResource AutoCompleteListBoxTemplate}"
                                                 TextSearchPath="{TemplateBinding TextSearchPath}"
                                                 ToolTip="{TemplateBinding ToolTip}">
 

@@ -87,6 +87,7 @@
     <Compile Include="EnhancedComboBox.cs" />
     <Compile Include="EnhancedComboContext.cs" />
     <Compile Include="EnhancedSelectionBox\EnhancedSelectionBox.cs" />
+    <Compile Include="EnhancedSelectionBox\ItemsToCollectionViewConverter.cs" />
     <Compile Include="IdToColorConverter.cs" />
     <Compile Include="ItemStyleSelector.cs" />
     <Compile Include="EnhancedSelectionBox\SelectionModeConverter.cs" />

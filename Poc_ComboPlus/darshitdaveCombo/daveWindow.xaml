@@ -148,6 +148,7 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+
         <Style TargetType="{x:Type Expander}">
             <Setter Property="Template">
                 <Setter.Value>
