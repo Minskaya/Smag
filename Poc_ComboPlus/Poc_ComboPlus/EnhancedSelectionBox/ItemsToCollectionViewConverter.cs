@@ -11,15 +11,26 @@ namespace Poc_ComboPlus
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values != null && values.Length == 2)
+            if (values != null && values.Length >= 2)
             {
                 var propertyName = values[1] as string;
 
-                var groupedCountries = new CollectionViewSource();
-                groupedCountries.GroupDescriptions.Add(new PropertyGroupDescription(propertyName));
-                groupedCountries.Source = values[0] as IEnumerable;
+                var collectionViewSource = new CollectionViewSource();
+                collectionViewSource.GroupDescriptions.Add(new PropertyGroupDescription(propertyName));
+                if (values.Length == 3)
+                {
+                    var sortDescriptions = values[2] as SortDescriptionCollection;
+                    if (sortDescriptions != null)
+                    {
+                        foreach (var item in sortDescriptions)
+                        {
+                            collectionViewSource.SortDescriptions.Add(item);
+                        }
+                    }
+                }
+                collectionViewSource.Source = values[0] as IEnumerable;
 
-                return groupedCountries.View;
+                return collectionViewSource.View;
             }
 
             return null;

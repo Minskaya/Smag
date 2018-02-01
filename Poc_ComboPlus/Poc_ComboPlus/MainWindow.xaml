@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Poc_ComboPlus.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:local="clr-namespace:Poc_ComboPlus"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="{Binding Title}"
@@ -129,14 +130,13 @@
             </telerik:RadComboBox>
         </Grid>
 
-        <Grid Height="100"
-              Margin="1,5">
+        <Grid Margin="1,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"
                                   SharedSizeGroup="Label" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Label>EnhancedSelectionBox</Label>
+            <Label>EnhancedSelectionBox Single</Label>
             <local:EnhancedSelectionBox x:Name="EnhancedSelectionBox"
                                         Grid.Column="1"
                                         GroupingMemberPath="Regroupement"
@@ -144,23 +144,40 @@
                                         ItemsSource="{Binding Items}"
                                         SelectedItemTemplate="{StaticResource MySelectedItemTemplate}"
                                         SelectionMode="Single"
-                                        TextSearchPath="Name" />
+                                        TextSearchPath="Name">
+
+                <local:EnhancedSelectionBox.SortDescriptions>
+                    <componentmodel:SortDescription Direction="Ascending"
+                                                    PropertyName="RegroupementId" />
+                    <componentmodel:SortDescription Direction="Descending"
+                                                    PropertyName="Id" />
+                </local:EnhancedSelectionBox.SortDescriptions>
+            </local:EnhancedSelectionBox>
         </Grid>
 
-        <Grid Height="100"
-              Margin="1,5">
+        <Grid Margin="1,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"
                                   SharedSizeGroup="Label" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Label>EnhancedComboBox</Label>
-            <local:EnhancedComboBox Grid.Column="1"
-                                    GroupingMemberPath="Regroupement"
-                                    IsEditable="True"
-                                    ItemTemplate="{StaticResource MyItemTemplate}"
-                                    ItemsSource="{Binding Items}"
-                                    TextSearchPath="Name" />
+            <Label>EnhancedSelectionBox Multiple</Label>
+            <local:EnhancedSelectionBox x:Name="EnhancedSelectionBoxMultiple"
+                                        Grid.Column="1"
+                                        GroupingMemberPath="Regroupement"
+                                        ItemTemplate="{StaticResource MyItemTemplate}"
+                                        ItemsSource="{Binding Items}"
+                                        SelectedItemTemplate="{StaticResource MySelectedItemTemplate}"
+                                        SelectionMode="Multiple"
+                                        TextSearchPath="Name">
+
+                <local:EnhancedSelectionBox.SortDescriptions>
+                    <componentmodel:SortDescription Direction="Ascending"
+                                                    PropertyName="RegroupementId" />
+                    <componentmodel:SortDescription Direction="Descending"
+                                                    PropertyName="Id" />
+                </local:EnhancedSelectionBox.SortDescriptions>
+            </local:EnhancedSelectionBox>
         </Grid>
     </StackPanel>
 </Window>

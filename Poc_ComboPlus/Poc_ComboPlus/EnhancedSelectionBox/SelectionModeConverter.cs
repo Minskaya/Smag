@@ -9,12 +9,12 @@ namespace Poc_ComboPlus
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (Telerik.Windows.Controls.Primitives.AutoCompleteSelectionMode)value;
+            return (Telerik.Windows.Controls.Primitives.AutoCompleteSelectionMode)(int)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (Poc_ComboPlus.SelectionMode)value;
+            return (Poc_ComboPlus.SelectionMode)(int)value;
         }
     }
 }

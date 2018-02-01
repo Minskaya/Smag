@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,8 +11,8 @@ namespace Poc_ComboPlus
 {
     public enum SelectionMode
     {
-        Multiple,
-        Single
+        Single,
+        Multiple
     }
 
     /// <summary>
@@ -78,9 +80,19 @@ namespace Poc_ComboPlus
         public static readonly DependencyProperty TextSearchPathProperty =
             DependencyProperty.Register(nameof(TextSearchPath), typeof(string), typeof(EnhancedSelectionBox), new PropertyMetadata(string.Empty));
 
+        private readonly SortDescriptionCollection _sort;
+        private RadAutoCompleteBox _part_Box;
+
+        private RadButton _part_ToggleButton;
+
         static EnhancedSelectionBox()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EnhancedSelectionBox), new FrameworkPropertyMetadata(typeof(EnhancedSelectionBox)));
+        }
+
+        public EnhancedSelectionBox()
+        {
+            _sort = new SortDescriptionCollection();
         }
 
         public string GroupingMemberPath
@@ -125,6 +137,15 @@ namespace Poc_ComboPlus
             set { SetValue(SelectionModeProperty, value); }
         }
 
+        /// <summary>
+        /// Collection of SortDescriptions, describing sorting.
+        /// This property is forwarded to any collection view created from this source.
+        /// </summary>
+        public SortDescriptionCollection SortDescriptions
+        {
+            get { return _sort; }
+        }
+
         public string TextSearchPath
         {
             get { return (string)GetValue(TextSearchPathProperty); }
@@ -146,10 +167,6 @@ namespace Poc_ComboPlus
             _part_ToggleButton.Click += Part_ToggleButton_Click;
             _part_Box.Populated += _part_Box_Populated;
         }
-
-        private RadAutoCompleteBox _part_Box;
-
-        private RadButton _part_ToggleButton;
 
         private void _part_Box_Populated(object sender, EventArgs e)
         {

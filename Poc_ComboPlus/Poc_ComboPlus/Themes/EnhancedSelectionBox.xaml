@@ -136,6 +136,9 @@
                                 <Binding Path="GroupingMemberPath"
                                          RelativeSource="{RelativeSource Mode=FindAncestor,
                                                                          AncestorType=local:EnhancedSelectionBox}" />
+                                <Binding Path="SortDescriptions"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                         AncestorType=local:EnhancedSelectionBox}" />
                             </MultiBinding>
                         </local:ListBox.ItemsSource>
 
