@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
 {
@@ -40,11 +42,13 @@ namespace Poc_ComboPlus
     ///     <MyNamespace:EnhancedSelectionBox/>
     ///
     /// </summary>
+    [TemplatePart(Name = "PART_ToggleButton", Type = typeof(RadButton))]
+    [TemplatePart(Name = "PART_Box", Type = typeof(RadAutoCompleteBox))]
     public class EnhancedSelectionBox : Control
     {
         // Using a DependencyProperty as the backing store for GroupingMemberPath.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty GroupingMemberPathProperty =
-            DependencyProperty.Register(nameof(GroupingMemberPath), typeof(string), typeof(EnhancedSelectionBox), new PropertyMetadata(string.Empty, OnGroupMemberPathChanged));
+            DependencyProperty.Register(nameof(GroupingMemberPath), typeof(string), typeof(EnhancedSelectionBox), new PropertyMetadata(string.Empty));
 
         // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ItemsSourceProperty =
@@ -127,9 +131,34 @@ namespace Poc_ComboPlus
             set { SetValue(TextSearchPathProperty, value); }
         }
 
-        private static void OnGroupMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public override void OnApplyTemplate()
         {
-            var comboBox = (EnhancedSelectionBox)d;
+            base.OnApplyTemplate();
+
+            _part_ToggleButton = GetTemplateChild("PART_ToggleButton") as RadButton;
+            _part_Box = GetTemplateChild("PART_Box") as RadAutoCompleteBox;
+
+            if (_part_ToggleButton == null || _part_Box == null)
+            {
+                throw new NullReferenceException("Template parts not available");
+            }
+
+            _part_ToggleButton.Click += Part_ToggleButton_Click;
+            _part_Box.Populated += _part_Box_Populated;
+        }
+
+        private RadAutoCompleteBox _part_Box;
+
+        private RadButton _part_ToggleButton;
+
+        private void _part_Box_Populated(object sender, EventArgs e)
+        {
+        }
+
+        private void Part_ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            _part_Box.Focus();
+            _part_Box.Populate(_part_Box.SearchText);
         }
     }
 }

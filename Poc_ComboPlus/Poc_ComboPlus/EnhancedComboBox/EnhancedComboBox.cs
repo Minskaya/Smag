@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
 {
@@ -41,6 +40,10 @@ namespace Poc_ComboPlus
         public static readonly DependencyProperty GroupingMemberPathProperty =
             DependencyProperty.Register(nameof(GroupingMemberPath), typeof(string), typeof(EnhancedComboBox), new PropertyMetadata(string.Empty));
 
+        // Using a DependencyProperty as the backing store for IsEditable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsEditableProperty =
+            DependencyProperty.Register(nameof(IsEditable), typeof(bool), typeof(EnhancedComboBox), new PropertyMetadata(false));
+
         // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(EnhancedComboBox), new PropertyMetadata((Enumerable.Empty<object>())));
@@ -70,6 +73,12 @@ namespace Poc_ComboPlus
         {
             get { return (string)GetValue(GroupingMemberPathProperty); }
             set { SetValue(GroupingMemberPathProperty, value); }
+        }
+
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
         }
 
         public IEnumerable ItemsSource

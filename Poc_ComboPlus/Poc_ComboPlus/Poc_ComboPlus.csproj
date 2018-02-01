@@ -87,9 +87,12 @@
     </ApplicationDefinition>
     <Compile Include="EnhancedComboBox\EnhancedComboBox.cs" />
     <Compile Include="EnhancedComboContext.cs" />
+    <Compile Include="EnhancedSelectionBox\EmptyAsyncFilteringBehavior.cs" />
     <Compile Include="EnhancedSelectionBox\EnhancedSelectionBox.cs" />
     <Compile Include="EnhancedSelectionBox\ItemsToCollectionViewConverter.cs" />
+    <Compile Include="EnhancedSelectionBox\ListBox.cs" />
     <Compile Include="EnhancedSelectionBox\SingleExpandedBehavior.cs" />
+    <Compile Include="EnhancedSelectionBox\VisualTreeHelperEx.cs" />
     <Compile Include="IdToColorConverter.cs" />
     <Compile Include="ItemStyleSelector.cs" />
     <Compile Include="EnhancedSelectionBox\SelectionModeConverter.cs" />
