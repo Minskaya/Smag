@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,13 @@ namespace Poc_ComboPlus
 
         public ListBox()
         {
-            this.IsVisibleChanged += ListBox_IsVisibleChanged;
+        }
+
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            this.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+
+            base.OnItemsChanged(e);
         }
 
         private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
@@ -26,14 +33,6 @@ namespace Poc_ComboPlus
             {
                 this.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
                 item.IsExpanded = true;
-            }
-        }
-
-        private void ListBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if ((bool)e.NewValue == true)
-            {
-                this.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
             }
         }
     }
