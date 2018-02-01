@@ -34,8 +34,8 @@ namespace Poc_ComboPlus
         /// </summary>
         private void ExpanderHasExpanded(object sender, RoutedEventArgs e)
         {
-            //var listbox = VisualTreeHelperEx.FindAncestorByType<ListBox>(sender as DependencyObject);
-            var listbox = VisualTreeHelperEx.FindAncestorByType<Telerik.Windows.Controls.RadListBox>(sender as DependencyObject);
+            var listbox = VisualTreeHelperEx.FindAncestorByType<ListBox>(sender as DependencyObject);
+            //var listbox = VisualTreeHelperEx.FindAncestorByType<Telerik.Windows.Controls.RadListBox>(sender as DependencyObject);
 
             foreach (var item in VisualTreeHelperEx.FindVisualChild<Expander>(listbox))
             {

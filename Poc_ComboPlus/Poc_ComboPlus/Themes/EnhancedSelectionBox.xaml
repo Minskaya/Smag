@@ -3,6 +3,12 @@
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:local="clr-namespace:Poc_ComboPlus"
                     xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/System.Windows.xaml" />
+        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml" />
+        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Data.xaml" />
+        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Input.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <local:SelectionModeConverter x:Key="SelectionModeConverter" />
     <local:ItemsToCollectionViewConverter x:Key="ItemsToCollectionViewConverter" />
@@ -45,6 +51,9 @@
                        Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
+
+    <Style BasedOn="{StaticResource RadListBoxStyle}"
+           TargetType="{x:Type local:ListBox}" />
 
     <ControlTemplate x:Key="AutoCompleteListBoxTemplate"
                      TargetType="{x:Type telerik:RadAutoCompleteBox}">
@@ -103,7 +112,7 @@
                       MinWidth="{TemplateBinding MinDropDownWidth}"
                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
                     <!--  Listbox contenant les propositions bindée sur les élements filtrés de l'autocompletebox  -->
-                    <telerik:RadListBox x:Name="PART_ListBox"
+                    <local:ListBox x:Name="PART_ListBox"
                                    MinWidth="{TemplateBinding MinDropDownWidth}"
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    Margin="0,1,0,0"
@@ -113,12 +122,12 @@
                                    IsTabStop="False"
                                    IsTextSearchEnabled="True"
                                    ItemTemplate="{TemplateBinding DropDownItemTemplate}"
+                                   SelectedValueBinding="{x:Null}"
                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                    TextBinding="{x:Null}"
                                    VirtualizingPanel.IsVirtualizing="True"
                                    VirtualizingPanel.IsVirtualizingWhenGrouping="True">
-                        <!--  SelectedValueBinding="{x:Null}" a quoi ca sert ?  -->
-                        <telerik:RadListBox.ItemsSource>
+                        <local:ListBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource ItemsToCollectionViewConverter}">
 
                                 <Binding Path="FilteredItems"
@@ -128,13 +137,13 @@
                                          RelativeSource="{RelativeSource Mode=FindAncestor,
                                                                          AncestorType=local:EnhancedSelectionBox}" />
                             </MultiBinding>
-                        </telerik:RadListBox.ItemsSource>
+                        </local:ListBox.ItemsSource>
 
-                        <telerik:RadListBox.GroupStyle>
+                        <local:ListBox.GroupStyle>
                             <GroupStyle ContainerStyle="{StaticResource GroupStyleWithHeaderStyle}"
                                         HeaderTemplate="{StaticResource DefaultHeaderTemplate}" />
-                        </telerik:RadListBox.GroupStyle>
-                    </telerik:RadListBox>
+                        </local:ListBox.GroupStyle>
+                    </local:ListBox>
 
                     <Border Width="{Binding Width,
                                             ElementName=PART_ListBox}"
@@ -267,7 +276,8 @@
                         </telerik:RadAutoCompleteBox>
                         <telerik:RadButton x:Name="PART_ToggleButton"
                                            Grid.Column="1"
-                                           VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                                           VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                           Cursor="Arrow">
                             <Path Width="5"
                                   Height="5"
                                   HorizontalAlignment="Left"
