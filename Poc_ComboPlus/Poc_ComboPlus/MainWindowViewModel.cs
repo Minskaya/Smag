@@ -6,15 +6,34 @@ using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
 {
+    public class Item
+    {
+        public Item()
+        {
+        }
+
+        public Item(int i)
+        {
+            this.Regroupement = string.Format(
+                "Regroupement {0}",
+                (i / 100) + 1);
+            this.RegroupementId = (i / 100) + 1;
+
+            this.Name = string.Format(
+                "Element {0}",
+                i);
+
+            this.Id = i;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Regroupement { get; set; }
+        public int RegroupementId { get; set; }
+    }
+
     public class MainWindowViewModel : ViewModelBase
     {
-        private Item selectedItem;
-
-        /// <summary>
-        /// Title />
-        /// </summary>
-        private string title = "Poc combo améliorée";
-
         public MainWindowViewModel()
         {
             this.Items = new SmartCollection<Item>();
@@ -26,9 +45,10 @@ namespace Poc_ComboPlus
             this.LoadItems();
         }
 
-        public SmartCollection<Item> Items { get; private set; }
-
+        public EnhancedComboContext EnhancedComboContext { get; private set; }
         public CollectionViewSource GroupedItems { get; private set; }
+        public SmartCollection<Item> Items { get; private set; }
+        public IList<Toto> LinqGroup { get; private set; }
 
         public Item SelectedItem
         {
@@ -61,16 +81,19 @@ namespace Poc_ComboPlus
             }
         }
 
-        public EnhancedComboContext EnhancedComboContext { get; private set; }
+        private Item selectedItem;
 
-        public IList<Toto> LinqGroup { get; private set; }
+        /// <summary>
+        /// Title />
+        /// </summary>
+        private string title = "Poc combo améliorée";
 
         private void LoadItems()
         {
             Task.Run(() =>
             {
                 List<Item> items = new List<Item>();
-                foreach (var id in Enumerable.Range(1, 9999))
+                foreach (var id in Enumerable.Range(1, 9999).Reverse())
                 {
                     items.Add(new Item(id));
                 }
@@ -109,31 +132,5 @@ namespace Poc_ComboPlus
     {
         public List<Item> Items { get; set; }
         public int Key { get; set; }
-    }
-
-    public class Item
-    {
-        public Item()
-        {
-        }
-
-        public Item(int i)
-        {
-            this.Regroupement = string.Format(
-                "Regroupement {0}",
-                (i / 100) + 1);
-            this.RegroupementId = (i / 100) + 1;
-
-            this.Name = string.Format(
-                "Element {0}",
-                i);
-
-            this.Id = i;
-        }
-
-        public string Regroupement { get; set; }
-        public int RegroupementId { get; set; }
-        public string Name { get; set; }
-        public int Id { get; set; }
     }
 }
