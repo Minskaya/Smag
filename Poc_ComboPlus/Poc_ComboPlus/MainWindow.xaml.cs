@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
@@ -12,15 +11,7 @@ namespace Poc_ComboPlus
         public MainWindow()
         {
             StyleManager.ApplicationTheme = new Windows8Theme();
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                // Log error (including InnerExceptions!)
-                // Handle exception
-            }
+            InitializeComponent();
             this.DataContext = new MainWindowViewModel();
         }
     }

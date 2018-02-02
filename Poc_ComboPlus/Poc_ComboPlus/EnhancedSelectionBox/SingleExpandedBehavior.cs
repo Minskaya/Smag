@@ -5,7 +5,7 @@ using System.Windows.Interactivity;
 namespace Poc_ComboPlus
 {
     /// <summary>
-    /// Behavior permettant de n'avoir qu'un seul expander déplié dans la radlistbox
+    /// Behavior permettant de n'avoir qu'un seul expander déplié dans la <see cref="ListBox"/>
     /// </summary>
     public class SingleExpandedBehavior : Behavior<Expander>
     {
@@ -35,7 +35,6 @@ namespace Poc_ComboPlus
         private void ExpanderHasExpanded(object sender, RoutedEventArgs e)
         {
             var listbox = VisualTreeHelperEx.FindAncestorByType<ListBox>(sender as DependencyObject);
-            //var listbox = VisualTreeHelperEx.FindAncestorByType<Telerik.Windows.Controls.RadListBox>(sender as DependencyObject);
 
             foreach (var item in VisualTreeHelperEx.FindVisualChild<Expander>(listbox))
             {

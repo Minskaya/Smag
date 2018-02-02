@@ -56,8 +56,7 @@ namespace Poc_ComboPlus
         }
 
         /// <summary>
-        /// Find the specified parent node
-        /// Find time considering FramworkElement and FramworkContentElement in two cases
+        /// Retourne le parent selon si targetDPObj est un FramworkElement ou un FramworkContentElement
         /// </summary>
         public static DependencyObject GetParent(DependencyObject targetDPObj)
         {

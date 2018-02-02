@@ -7,17 +7,22 @@ using Telerik.Windows.Controls;
 
 namespace Poc_ComboPlus
 {
+    /// <summary>
+    /// Custom RadListBox pour force l'expand du premier expander
+    /// </summary>
     public class ListBox : RadListBox
     {
+        /// <summary>
+        /// Constructeur statique
+        /// </summary>
         static ListBox()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ListBox), new FrameworkPropertyMetadata(typeof(ListBox)));
         }
 
-        public ListBox()
-        {
-        }
-
+        /// <summary>
+        /// Appellé quand la source de donnée change
+        /// </summary>
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             this.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
@@ -25,6 +30,9 @@ namespace Poc_ComboPlus
             base.OnItemsChanged(e);
         }
 
+        /// <summary>
+        /// Handler de l'evenement StatusChanged
+        /// </summary>
         private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
         {
             var item = VisualTreeHelperEx.FindVisualChild<Expander>(this)
