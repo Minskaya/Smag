@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -79,11 +78,6 @@ namespace Poc_ComboPlus
         // Using a DependencyProperty as the backing store for TextSearchPath.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextSearchPathProperty =
             DependencyProperty.Register(nameof(TextSearchPath), typeof(string), typeof(EnhancedSelectionBox), new PropertyMetadata(string.Empty));
-
-        private readonly SortDescriptionCollection _sort;
-        private RadAutoCompleteBox _part_Box;
-
-        private RadButton _part_ToggleButton;
 
         static EnhancedSelectionBox()
         {
@@ -167,6 +161,11 @@ namespace Poc_ComboPlus
             _part_ToggleButton.Click += Part_ToggleButton_Click;
             _part_Box.Populated += _part_Box_Populated;
         }
+
+        private readonly SortDescriptionCollection _sort;
+        private RadAutoCompleteBox _part_Box;
+
+        private RadButton _part_ToggleButton;
 
         private void _part_Box_Populated(object sender, EventArgs e)
         {

@@ -265,6 +265,12 @@
                                                     Opacity="{TemplateBinding Opacity}"
                                                     ScrollViewer.HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                                     ScrollViewer.VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                    SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                                           Path=SelectedItem,
+                                                                           Mode=TwoWay}"
+                                                    SelectedItems="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                                            Path=SelectedItems,
+                                                                            Mode=TwoWay}"
                                                     SelectionMode="{TemplateBinding SelectionMode,
                                                                                     Converter={StaticResource SelectionModeConverter}}"
                                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
