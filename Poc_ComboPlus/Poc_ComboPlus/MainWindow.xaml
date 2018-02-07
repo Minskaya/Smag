@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:Poc_ComboPlus"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="{Binding Title}"
+        FontWeight="Bold"
         Width="500"
         Height="700">
     <Window.Resources>
@@ -125,6 +126,7 @@
                                  OpenDropDownOnFocus="True"
                                  StaysOpenOnEdit="True"
                                  TextSearch.Text="Name"
+                                 telerik:TextSearch.TextPath ="Name"
                                  TextSearchMode="Contains"
                                  UpdateTextOnLostFocus="False"
                                  VirtualizingPanel.IsVirtualizing="True"
