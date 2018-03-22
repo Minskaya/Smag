@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:DecimalMarkupExtension"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:DecimalMarkupExtension"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow"
@@ -38,12 +38,14 @@
         </ComboBox>
 
         <TextBox Text="{Binding Pi}" />
+        <!--Marche pas : impossible de modifier le binding apres l'attachement
         <TextBox Text="{Binding Pi}">
             <i:Interaction.Behaviors>
                 <local:DecimalAttachedBehavior Precision="2" ScalingFactor="TenThousand" />
             </i:Interaction.Behaviors>
-        </TextBox>
+        </TextBox>-->
 
+        <TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
         <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />
     </StackPanel>
 </Window>

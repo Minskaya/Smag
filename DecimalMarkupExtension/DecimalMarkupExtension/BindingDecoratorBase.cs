@@ -228,6 +228,17 @@ namespace DecimalMarkupExtension
 
         #endregion
 
+        private bool IsBindingExpression
+        {
+            get
+            {
+                return binding != null &&
+                    (binding.Source != null || binding.RelativeSource != null ||
+                     binding.ElementName != null || binding.XPath != null ||
+                     binding.Path != null);
+            }
+        }
+
         /// <summary>
         /// This basic implementation just sets a binding on the targeted
         /// <see cref="DependencyObject"/> and returns the appropriate
@@ -247,6 +258,63 @@ namespace DecimalMarkupExtension
             //create a binding and associate it with the target
             return binding.ProvideValue(provider);
         }
+
+        protected Binding CreateBinding()
+        {
+            Binding newBinding = new Binding();
+            if (IsBindingExpression)
+            {
+                // copy all the properties of the binding to the new binding
+                //
+                if (binding.ElementName != null)
+                {
+                    newBinding.ElementName = binding.ElementName;
+                }
+                if (binding.RelativeSource != null)
+                {
+                    newBinding.RelativeSource = binding.RelativeSource;
+                }
+                if (binding.Source != null)
+                {
+                    newBinding.Source = binding.Source;
+                }
+
+                newBinding.AsyncState = binding.AsyncState;
+                newBinding.BindingGroupName = binding.BindingGroupName;
+                newBinding.BindsDirectlyToSource = binding.BindsDirectlyToSource;
+                newBinding.Converter = binding.Converter;
+                newBinding.ConverterCulture = binding.ConverterCulture;
+                newBinding.ConverterParameter = binding.ConverterParameter;
+                newBinding.FallbackValue = binding.FallbackValue;
+                newBinding.IsAsync = binding.IsAsync;
+                newBinding.Mode = binding.Mode;
+                newBinding.NotifyOnSourceUpdated = binding.NotifyOnSourceUpdated;
+                newBinding.NotifyOnTargetUpdated = binding.NotifyOnTargetUpdated;
+                newBinding.NotifyOnValidationError = binding.NotifyOnValidationError;
+                newBinding.Path = binding.Path;
+                //if (string.IsNullOrEmpty(binding.TargetNullKey))
+                //{
+                //    newBinding.TargetNullValue = binding.TargetNullValue;
+                //}
+                //else
+                //{
+                //    newBinding.TargetNullValue = GetLocalizedResource(bindingTargetNullKey);
+                //}
+                newBinding.UpdateSourceTrigger = binding.UpdateSourceTrigger;
+                newBinding.ValidatesOnDataErrors = binding.ValidatesOnDataErrors;
+                newBinding.ValidatesOnExceptions = binding.ValidatesOnExceptions;
+                foreach (ValidationRule rule in binding.ValidationRules)
+                {
+                    newBinding.ValidationRules.Add(rule);
+                }
+                newBinding.XPath = binding.XPath;
+                newBinding.StringFormat = GetStringFormat();
+            }
+
+            return newBinding;
+        }
+
+        protected abstract string GetStringFormat();
 
         /// <summary>
         /// Validates a service provider that was submitted to the <see cref="ProvideValue"/>

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
@@ -42,29 +40,37 @@ namespace DecimalMarkupExtension
         public override object ProvideValue(IServiceProvider provider)
         {
             //delegate binding creation etc. to the base class
-            BindingExpression val = base.ProvideValue(provider) as BindingExpression;
+            //BindingExpression val = base.ProvideValue(provider) as BindingExpression;
 
-            NumberScalingFormatter formatter = new NumberScalingFormatter(
-                this.ScalingFactor,
-                CultureInfo.CurrentCulture);
+            //NumberScalingFormatter formatter = new NumberScalingFormatter(
+            //    this.ScalingFactor,
+            //    CultureInfo.CurrentCulture);
 
-            //try to get bound items for our custom work
-            DependencyObject targetObject;
-            DependencyProperty targetProperty;
-            bool status = TryGetTargetItems(provider, out targetObject, out targetProperty);
+            ////try to get bound items for our custom work
+            //DependencyObject targetObject;
+            //DependencyProperty targetProperty;
+            //bool status = TryGetTargetItems(provider, out targetObject, out targetProperty);
 
-            if (targetObject == null)
-            {
-                // Cas d'un template
-                return this;
-            }
+            //if (targetObject == null)
+            //{
+            //    // Cas d'un template
+            //    return this;
+            //}
 
-            if (status)
-            {
-                Binding b;
-            }
-            //val = "toto";
-            return val;
+            //if (status)
+            //{
+            //    Binding b;
+            //}
+            ////val = "toto";
+            //return val;
+
+            Binding binding = CreateBinding();
+            return binding.ProvideValue(provider);
+        }
+
+        protected override string GetStringFormat()
+        {
+            return "{0:N" + this.Precision + "}";
         }
     }
 }
