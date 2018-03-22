@@ -18,6 +18,7 @@
         <Style TargetType="Slider">
             <Setter Property="Margin" Value="10,30" />
         </Style>
+        <local:DecimalPrecisionConverter x:Key="DecimalPrecisionConverter" />
     </Window.Resources>
     <StackPanel DataContext="{StaticResource MainViewModel}">
         <Slider x:Name="Precision"
@@ -47,5 +48,15 @@
 
         <TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
         <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />
+
+        <TextBox>
+            <TextBox.Text>
+                <MultiBinding Converter="{StaticResource DecimalPrecisionConverter}"
+                              ConverterParameter="TenThousand">
+                    <Binding Path="Area" />
+                    <Binding Path="Precision" />
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
     </StackPanel>
 </Window>
