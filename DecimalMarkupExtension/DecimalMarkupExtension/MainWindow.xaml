@@ -69,6 +69,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <DataTemplate x:Key="ColumnGroupDescriptorTemplate">
+            <TextBlock Text="{Binding DisplayContent}" />
+        </DataTemplate>
     </Window.Resources>
     <Window.DataContext>
         <local:MainViewModel />
@@ -101,8 +105,10 @@
             </i:Interaction.Behaviors>
         </TextBox>-->
 
-        <!--<TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
-        <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />-->
+        <!--
+        <TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
+        <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />
+        -->
 
         <TextBox>
             <TextBox.Text>
@@ -133,8 +139,8 @@
 
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Variety}"
-                                            ShowColumnWhenGrouped="False"
                                             IsVisible="False"
+                                            ShowColumnWhenGrouped="False"
                                             UniqueName="Variety">
                     <telerik:GridViewDataColumn.AggregateFunctions>
                         <telerik:SumFunction Caption="Taille :"
@@ -153,35 +159,33 @@
                        TargetType="{x:Type telerik:GridViewAggregateResultCell}" />
             </telerik:RadGridView.Resources>
 
-            <telerik:RadGridView.GroupDescriptors>
-                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\], ElementName=Grid}"
-                                               SortDirection="Ascending"
-                                               DisplayContent="Variété" />
-                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\], ElementName=Grid}"
-                                               SortDirection="Ascending"
-                                               DisplayContent="Contrat" />
-            </telerik:RadGridView.GroupDescriptors>
+            <!--<telerik:RadGridView.GroupDescriptors>
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\],
+                                  ElementName=Grid}"
+                                               DisplayContent="Variété"
+                                               SortDirection="Ascending" />
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\],
+                                  ElementName=Grid}"
+                                               DisplayContent="Contrat"
+                                               SortDirection="Ascending" />
+            </telerik:RadGridView.GroupDescriptors>-->
 
             <i:Interaction.Behaviors>
                 <local:BindGroupDescriptorBehavior GroupDescriptor="{Binding ElementName=cmbGroups, Path=SelectedItem}" />
             </i:Interaction.Behaviors>
         </telerik:RadGridView>
-        <ComboBox x:Name="cmbGroups">
-            <ComboBoxItem>
-                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\], Source={x:Reference Grid}}"
-                                               SortDirection="Ascending"
-                                               DisplayContent="Variété" />
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\], Source={x:Reference Grid}}"
-                                               SortDirection="Ascending"
-                                               DisplayContent="Contrat" />
-            </ComboBoxItem>
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding DisplayContent, BindsDirectlyToSource=True}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+
+        <ComboBox x:Name="cmbGroups"
+                  ItemTemplate="{StaticResource ColumnGroupDescriptorTemplate}"
+                  SelectedIndex="0">
+            <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\],
+                              Source={x:Reference Grid}}"
+                                           DisplayContent="Variété"
+                                           SortDirection="Ascending" />
+            <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\],
+                              Source={x:Reference Grid}}"
+                                           DisplayContent="Contrat"
+                                           SortDirection="Ascending" />
         </ComboBox>
     </StackPanel>
 </Window>
