@@ -6,18 +6,21 @@ namespace DecimalMarkupExtension
 {
     public class DecimalPrecisionConverter : IMultiValueConverter
     {
+        private NumberScalingFormatter formatter = new NumberScalingFormatter(/*CultureInfo.CurrentCulture*/);
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             double number = System.Convert.ToDouble(values[0]);
-            int precision = System.Convert.ToInt32(values[1]);
+            int precision = values.Length > 1
+                            ? System.Convert.ToInt32(values[1])
+                            : CultureInfo.CurrentCulture.NumberFormat.NumberDecimalDigits;
 
             ScalingFactor scale;
             Enum.TryParse<ScalingFactor>(parameter as string, out scale);
 
-            NumberScalingFormatter formatter = new NumberScalingFormatter(scale, CultureInfo.CurrentCulture);
             return string.Format(
                 formatter,
-                "{0:N" + precision + "}",
+                "{0:N" + precision + ":" + scale + "}",
                 number);
         }
 

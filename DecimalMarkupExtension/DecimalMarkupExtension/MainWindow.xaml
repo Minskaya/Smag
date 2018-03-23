@@ -6,21 +6,75 @@
         xmlns:local="clr-namespace:DecimalMarkupExtension"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="MainWindow"
         Width="525"
-        Height="350"
+        Height="500"
         mc:Ignorable="d">
     <Window.Resources>
-        <local:MainViewModel x:Key="MainViewModel" />
+
         <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="10,30" />
+            <Setter Property="Margin"
+                    Value="10,30" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin"
+                    Value="15,0" />
         </Style>
         <Style TargetType="Slider">
-            <Setter Property="Margin" Value="10,30" />
+            <Setter Property="Margin"
+                    Value="10,30" />
         </Style>
+
         <local:DecimalPrecisionConverter x:Key="DecimalPrecisionConverter" />
+
+        <Style x:Key="ContournementElementName2"
+               TargetType="ContentControl">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource DecimalPrecisionConverter}"
+                                  ConverterParameter="TenThousand">
+                        <Binding Path="FormattedValue" />
+                        <Binding Path="DataContext.Precision"
+                                 RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                         AncestorType=Window}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DecimalGridViewAggregateResultCellStyle"
+               BasedOn="{StaticResource {x:Type telerik:GridViewAggregateResultCell}}"
+               TargetType="{x:Type telerik:GridViewAggregateResultCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Background="{TemplateBinding Background}"
+                                    Orientation="Horizontal">
+                            <ContentControl Margin="10,0,0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Content="{Binding Caption}"
+                                            Foreground="{TemplateBinding Foreground}" />
+                            <ContentControl Margin="3,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            Style="{StaticResource ContournementElementName2}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <StackPanel DataContext="{StaticResource MainViewModel}">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <StackPanel>
         <Slider x:Name="Precision"
                 AutoToolTipPlacement="BottomRight"
                 IsSnapToTickEnabled="True"
@@ -38,7 +92,8 @@
             </ComboBoxItem>
         </ComboBox>
 
-        <TextBox Text="{Binding Pi}" />
+        <TextBlock Text="{Binding Pi}" />
+
         <!--Marche pas : impossible de modifier le binding apres l'attachement
         <TextBox Text="{Binding Pi}">
             <i:Interaction.Behaviors>
@@ -46,8 +101,20 @@
             </i:Interaction.Behaviors>
         </TextBox>-->
 
-        <TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
-        <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />
+        <!--<TextBox Text="{local:DecimalBinding Pi, Precision=2, ScalingFactor=TenThousand}" />
+        <TextBox Text="{local:DecimalBinding Area, Precision=2, ScalingFactor=TenThousand}" />-->
+
+        <TextBox>
+            <TextBox.Text>
+                <MultiBinding Converter="{StaticResource DecimalPrecisionConverter}"
+                              ConverterParameter="None">
+                    <Binding Path="Pi" />
+                    <Binding Path="Precision" />
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
+
+        <TextBlock Text="{Binding Area}" />
 
         <TextBox>
             <TextBox.Text>
@@ -58,5 +125,63 @@
                 </MultiBinding>
             </TextBox.Text>
         </TextBox>
+
+        <telerik:RadGridView x:Name="Grid"
+                             AutoGenerateColumns="False"
+                             GroupRenderMode="Flat"
+                             ItemsSource="{Binding Items}">
+
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Variety}"
+                                            ShowColumnWhenGrouped="False"
+                                            IsVisible="False"
+                                            UniqueName="Variety">
+                    <telerik:GridViewDataColumn.AggregateFunctions>
+                        <telerik:SumFunction Caption="Taille :"
+                                             SourceField="Area" />
+                    </telerik:GridViewDataColumn.AggregateFunctions>
+                </telerik:GridViewDataColumn>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Area}" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding HasContract}"
+                                            IsVisible="False"
+                                            ShowColumnWhenGrouped="False" />
+            </telerik:RadGridView.Columns>
+
+            <telerik:RadGridView.Resources>
+                <Style BasedOn="{StaticResource DecimalGridViewAggregateResultCellStyle}"
+                       TargetType="{x:Type telerik:GridViewAggregateResultCell}" />
+            </telerik:RadGridView.Resources>
+
+            <telerik:RadGridView.GroupDescriptors>
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\], ElementName=Grid}"
+                                               SortDirection="Ascending"
+                                               DisplayContent="Variété" />
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\], ElementName=Grid}"
+                                               SortDirection="Ascending"
+                                               DisplayContent="Contrat" />
+            </telerik:RadGridView.GroupDescriptors>
+
+            <i:Interaction.Behaviors>
+                <local:BindGroupDescriptorBehavior GroupDescriptor="{Binding ElementName=cmbGroups, Path=SelectedItem}" />
+            </i:Interaction.Behaviors>
+        </telerik:RadGridView>
+        <ComboBox x:Name="cmbGroups">
+            <ComboBoxItem>
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\Variety\], Source={x:Reference Grid}}"
+                                               SortDirection="Ascending"
+                                               DisplayContent="Variété" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <telerik:ColumnGroupDescriptor Column="{Binding Columns[\HasContract\], Source={x:Reference Grid}}"
+                                               SortDirection="Ascending"
+                                               DisplayContent="Contrat" />
+            </ComboBoxItem>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayContent, BindsDirectlyToSource=True}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </StackPanel>
 </Window>

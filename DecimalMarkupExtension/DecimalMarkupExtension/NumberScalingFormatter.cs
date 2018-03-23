@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace DecimalMarkupExtension
 {
     public class NumberScalingFormatter : IFormatProvider, ICustomFormatter
     {
-        private readonly ScalingFactor _scalingFactor;
         private readonly System.Globalization.CultureInfo _underlyingCulture;
+        private ScalingFactor _scalingFactor;
 
         public NumberScalingFormatter(ScalingFactor scalingFactor, System.Globalization.CultureInfo underlyingCulture)
         {
@@ -14,24 +15,25 @@ namespace DecimalMarkupExtension
             {
                 throw new ArgumentNullException();
             }
+
             _scalingFactor = scalingFactor;
             _underlyingCulture = underlyingCulture;
         }
 
-        public System.Globalization.CultureInfo Culture
+        public NumberScalingFormatter(System.Globalization.CultureInfo underlyingCulture)
         {
-            get
+            if (underlyingCulture == null)
             {
-                return _underlyingCulture;
+                throw new ArgumentNullException();
             }
+
+            _scalingFactor = ScalingFactor.None;
+            _underlyingCulture = underlyingCulture;
         }
 
-        public ScalingFactor Factor
+        public NumberScalingFormatter()
         {
-            get
-            {
-                return _scalingFactor;
-            }
+            _scalingFactor = ScalingFactor.None;
         }
 
         #region IFormatProvider Members
@@ -45,7 +47,8 @@ namespace DecimalMarkupExtension
             }
             else
             {
-                formatter = _underlyingCulture.GetFormat(formatType);
+                formatter = (_underlyingCulture ?? CultureInfo.CurrentCulture)
+                            .GetFormat(formatType);
             }
             return formatter;
         }
@@ -60,16 +63,28 @@ namespace DecimalMarkupExtension
             if (!string.IsNullOrEmpty(format))
             {
                 formattableString.Append(":");
-                formattableString.Append(format);
+                //formattableString.Append(format);
+
+                var toto = format.Split(':');
+
+                formattableString.Append(toto[0]);
+                ScalingFactor scale;
+                if (Enum.TryParse<ScalingFactor>(toto[1], out scale))
+                {
+                    this._scalingFactor = scale;
+                }
             }
             formattableString.Append("}");
 
-            return string.Format(_underlyingCulture, formattableString.ToString(), Scale(arg));
+            return string.Format(
+                _underlyingCulture ?? CultureInfo.CurrentCulture,
+                formattableString.ToString(),
+                Scale(arg));
         }
 
-        private int GetUnderlyingThousandScalingFactor()
+        private double GetUnderlyingThousandScalingFactor()
         {
-            int underlyingThousandScalingFactor;
+            double underlyingThousandScalingFactor;
 
             switch (_scalingFactor)
             {
@@ -77,15 +92,28 @@ namespace DecimalMarkupExtension
                     underlyingThousandScalingFactor = 0;
                     break;
 
+                case ScalingFactor.Thousand:
+                    underlyingThousandScalingFactor = 1E-3;
+                    break;
+
+                case ScalingFactor.TenThousand:
+                    underlyingThousandScalingFactor = 1E-4;
+                    break;
+
+                case ScalingFactor.HundredThousand:
+                    underlyingThousandScalingFactor = 1E-5;
+                    break;
+
                 case ScalingFactor.Billion:
-                    underlyingThousandScalingFactor = 3;
+                    underlyingThousandScalingFactor = 1E-6;
                     break;
 
                 default:
                 case ScalingFactor.Million:
-                    underlyingThousandScalingFactor = 2;
+                    underlyingThousandScalingFactor = 1E-9;
                     break;
             }
+
             return underlyingThousandScalingFactor;
         }
 
@@ -103,11 +131,11 @@ namespace DecimalMarkupExtension
             }
             else
             {
-                int underlyingThousandScalingFactor = GetUnderlyingThousandScalingFactor();
+                double underlyingThousandScalingFactor = GetUnderlyingThousandScalingFactor();
                 try
                 {
                     double convertedValue = Convert.ToDouble(arg);
-                    scaledValue = Math.Pow(10, underlyingThousandScalingFactor * -3) * convertedValue;
+                    scaledValue = underlyingThousandScalingFactor * convertedValue;
                 }
                 catch (InvalidCastException)
                 {

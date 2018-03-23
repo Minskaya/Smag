@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Controls;
 using Prism.Mvvm;
@@ -27,6 +28,14 @@ namespace DecimalMarkupExtension
             this._pi = Math.PI;
             this.Area = 912345; //91 Ha
             this.Culture = new ComboBoxItem() { Content = "fr-FR" };
+
+            this.Items = new ObservableCollection<Item>()
+            {
+                new Item() { Variety = "Blé", Name= "Parcelle 1", Area=11111, HasContract = true },
+                new Item() { Variety = "Blé", Name= "Parcelle 2", Area=22222 },
+                new Item() { Variety = "Orge", Name= "Parcelle 3", Area=33333, HasContract = true },
+                new Item() { Variety = "Orge", Name= "Parcelle 4", Area=44444 },
+            };
         }
 
         public int Area { get; private set; }
@@ -48,6 +57,8 @@ namespace DecimalMarkupExtension
                 this.RaisePropertyChanged("");
             }
         }
+
+        public ObservableCollection<Item> Items { get; private set; }
 
         /// <summary>
         /// Gets and sets The property's value
