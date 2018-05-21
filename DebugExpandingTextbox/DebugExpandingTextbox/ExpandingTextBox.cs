@@ -189,68 +189,67 @@ namespace Smag.Tars.UI.Wpf.Controls
             _popup.IsOpen = false;
         }
 
-            #endregion Public Methods
+        #endregion Public Methods
 
-            #region Private Methods
+        #region Private Methods
 
-            /// <summary>
-            /// Handler quand Text change
-            /// </summary>
-            private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Handler quand Text change
+        /// </summary>
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ExpandingTextBox tx = d as ExpandingTextBox;
+
+            if (tx._summaryTextbox != null)
             {
-                ExpandingTextBox tx = d as ExpandingTextBox;
-
-                if (tx._summaryTextbox != null)
-                {
-                    tx._summaryTextbox.Text = SummarizeText(e.NewValue); ;
-                }
+                tx._summaryTextbox.Text = SummarizeText(e.NewValue); ;
             }
+        }
 
-            private static string SummarizeText(object value)
+        private static string SummarizeText(object value)
+        {
+            var text = (string)value;
+
+            // on supprimme tous les sauts de lignes
+            var trimmed = string.IsNullOrEmpty(text)
+                          ? string.Empty
+                          : text
+                                .Replace(Environment.NewLine, " ")
+                                .Trim();
+            return trimmed;
+        }
+
+        /// <summary>
+        /// Ferme la popup lorsque l'utilisateur appuie sur la tabulation
+        /// </summary>
+        private void _fullTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
             {
-                var text = (string)value;
-
-                // on supprimme tous les sauts de lignes
-                var trimmed = string.IsNullOrEmpty(text)
-                              ? string.Empty
-                              : text
-                                    .Replace(Environment.NewLine, " ")
-                                    .Trim();
-                return trimmed;
-            }
-
-            /// <summary>
-            /// Ferme la popup lorsque l'utilisateur appuie sur la tabulation
-            /// </summary>
-            private void _fullTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
-            {
-                if (e.Key == Key.Tab)
-                {
-                    _popup.IsOpen = false;
-                    this.MoveToNextUIElement();
-                    e.Handled = true;
-                }
-            }
-
-            private void _popup_Closed(object sender, EventArgs e)
-            {
+                _popup.IsOpen = false;
                 this.MoveToNextUIElement();
-            }
-
-            /// <summary>
-            /// Ouvre la popup quand la textbox obtient le focus
-            /// </summary>
-            private void _summaryTextbox_GotFocus(object sender, RoutedEventArgs e)
-            {
-                _summaryTextbox.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    _popup.IsOpen = true;
-                    _fullTextbox.Focus();
-                }));
-
                 e.Handled = true;
             }
+        }
 
+        private void _popup_Closed(object sender, EventArgs e)
+        {
+            this.MoveToNextUIElement();
+        }
+
+        /// <summary>
+        /// Ouvre la popup quand la textbox obtient le focus
+        /// </summary>
+        private void _summaryTextbox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _summaryTextbox.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _popup.IsOpen = true;
+                _fullTextbox.Focus();
+            }));
+
+            e.Handled = true;
+        }
 
         /// <summary>
         /// Handler quand le texte change
