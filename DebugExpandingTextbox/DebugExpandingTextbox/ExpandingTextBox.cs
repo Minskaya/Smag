@@ -135,6 +135,11 @@ namespace Smag.Tars.UI.Wpf.Controls
         {
             base.OnApplyTemplate();
 
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
+
             if (_summaryTextbox != null)
             {
                 _summaryTextbox.GotFocus -= _summaryTextbox_GotFocus;
@@ -155,13 +160,33 @@ namespace Smag.Tars.UI.Wpf.Controls
             }
 
             _popup = (Popup)Template.FindName(PART_Popup, this);
-            _popup.Closed += _popup_Closed;
+            if (_popup != null)
+            {
+                _popup.Closed += _popup_Closed;
+            }
 
             _fullTextbox = (TextBox)Template.FindName(PART_FullTextBox, this);
-            //if (_fullTextbox != null)
-            //{
-            //    _fullTextbox.PreviewKeyDown += _fullTextbox_PreviewKeyDown;
-            //}
+            if (_fullTextbox != null)
+            {
+                //    _fullTextbox.PreviewKeyDown += _fullTextbox_PreviewKeyDown;
+                _fullTextbox.LostKeyboardFocus += _fullTextbox_LostKeyboardFocus;
+                _fullTextbox.LostFocus += _fullTextbox_LostFocus;
+            }
+        }
+
+        private void _fullTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("_fullTextbox_LostFocus");
+        }
+
+        private void _fullTextbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("_fullTextbox_LostKeyboardFocus");
+        }
+
+        private void ExpandingTextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            _popup.IsOpen = false;
         }
 
         #endregion Public Methods

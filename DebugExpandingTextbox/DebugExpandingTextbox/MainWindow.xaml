@@ -8,18 +8,47 @@
         Title="MainWindow"
         Width="400"
         Height="450"
-        FocusManager.FocusedElement="{Binding ElementName=AA}"
+        FocusManager.FocusedElement="{Binding ElementName=OpenBtn}"
         mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBox x:Name="AA">AAAAAA</TextBox>
-        <ctrl:ExpandingTextBox Grid.Row="1"
+        <StackPanel>
+            <Button Content="ButtonA" />
+            <ItemsControl IsTabStop="False"
+                          KeyboardNavigation.TabNavigation="Cycle">
+                <TextBox Text="One" />
+                <TextBox Text="Two" />
+                <TextBox Text="Three" />
+                <TextBox Text="Four" />
+            </ItemsControl>
+            <Button x:Name="OpenBtn"
+                    Click="Button_Click"
+                    Content="Open" />
+            <Popup x:Name="Dummy"
+                   IsOpen="False"
+                   FocusManager.IsFocusScope="True"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=OpenBtn}"
+                   StaysOpen="True">
+                <TextBox x:Name="aliceBlue"
+                         Background="AliceBlue">
+                    A l'interieur de la popup
+                </TextBox>
+            </Popup>
+        </StackPanel>
+
+        <TextBox x:Name="AA"
+                 Grid.Row="1">
+            AAAAAA
+        </TextBox>
+        <ctrl:ExpandingTextBox Grid.Row="2"
                                Text="toto" />
-        <TextBox Grid.Row="2">BBBB</TextBox>
+        <TextBox Grid.Row="3">BBBB</TextBox>
     </Grid>
 </Window>

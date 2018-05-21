@@ -34,7 +34,7 @@
                                FocusManager.IsFocusScope="False"
                                Focusable="False"
                                IsOpen="False"
-                               KeyboardNavigation.TabNavigation="Continue"
+                               KeyboardNavigation.TabNavigation="Local"
                                Placement="Relative"
                                PlacementTarget="{Binding ElementName=PART_SummaryTextbox}"
                                PopupAnimation="Fade"
