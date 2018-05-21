@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DebugExpandingTextbox
 {
@@ -20,9 +8,26 @@ namespace DebugExpandingTextbox
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Public Constructors
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Dummy.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.Dummy.IsOpen = true;
+                aliceBlue.Focus();
+            }));
+        }
+
+        #endregion Private Methods
     }
 }
